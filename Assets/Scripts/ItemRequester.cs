@@ -8,6 +8,8 @@ public class ItemRequester : MonoBehaviour
     [SerializeField] private Item[] allItems; // Массив всех доступных айтемов
     public Item RequestedItem;
 
+    private GameObject textContainer;
+
     private void Start()
     {
         // Загружаем все Item ScriptableObjects из папки Resources
@@ -49,13 +51,19 @@ public class ItemRequester : MonoBehaviour
         return allItems[Random.Range(0, allItems.Length)];
     }
 
-    private GameObject textContainer; // Ссылка на объект с текстом
+    
 
-    private void CreateFloatingText(string itemName)
+    public void CreateFloatingText(string itemName)
     {
+        // Удаляем предыдущий текст, если он существует
+        if (textContainer != null)
+        {
+            Destroy(textContainer);
+        }
+
         // Создаем новый GameObject для фона
         textContainer = GameObject.CreatePrimitive(PrimitiveType.Quad);
-
+        
         // Настраиваем материал для фона
         MeshRenderer meshRenderer = textContainer.GetComponent<MeshRenderer>();
         meshRenderer.material = new Material(Shader.Find("Unlit/Color"));

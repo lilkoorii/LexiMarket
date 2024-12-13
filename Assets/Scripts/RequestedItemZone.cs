@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class RequestedItemZone : MonoBehaviour
 {
+    void Start() {
+
+        ItemRequester itemRequester = FindObjectOfType<ItemRequester>();
+    }
     private void OnTriggerEnter(Collider other)
     {
+        ItemRequester itemRequester = FindObjectOfType<ItemRequester>();
         // Проверяем, есть ли у объекта компонент CheckableItem
         CheckableItem checkableItem = other.GetComponent<CheckableItem>();
         
@@ -15,12 +20,16 @@ public class RequestedItemZone : MonoBehaviour
             if (checkableItem.CheckMatch())
             {
                 Debug.Log("Correct item placed!");
+                itemRequester.CreateFloatingText(checkableItem.item.itemName, checkableItem.item.icon);
+                itemRequester.CreateFloatingText("Правильный предмет!");
                 // Здесь можно добавить логику для правильного предмета
                 // Например, начислить очки или показать эффект
             }
             else
             {
                 Debug.Log("Wrong item placed!");
+                itemRequester.CreateFloatingText(checkableItem.item.itemName);
+                itemRequester.CreateFloatingText("Неправильный предмет!");
                 // Здесь можно добавить логику для неправильного предмета
                 // Например, показать сообщение об ошибке
             }
