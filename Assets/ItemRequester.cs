@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ItemRequester : MonoBehaviour
@@ -13,6 +14,28 @@ public class ItemRequester : MonoBehaviour
         allItems = Resources.LoadAll<Item>("Items");
         RequestedItem = GetRandomItem();
         Debug.Log(RequestedItem.itemName);
+
+        // Создаем текст 
+        CreateFloatingText(RequestedItem.itemName);
+    }
+
+    private void Update()
+    {
+        if (textContainer != null)
+        {
+            // Позиционируем контейнер над игроком
+            Vector3 newPosition = new Vector3(
+                transform.position.x,
+                transform.position.y + 2f,
+                transform.position.z
+            );
+
+            textContainer.transform.position = newPosition;
+
+            // Поворачиваем лицом к камере
+            textContainer.transform.LookAt(Camera.main.transform);
+            textContainer.transform.Rotate(0, 180, 0);
+        }
     }
 
     // Получить один случайный айтем
@@ -23,9 +46,37 @@ public class ItemRequester : MonoBehaviour
             Debug.LogWarning("No items found!");
             return null;
         }
+        return allItems[Random.Range(0, allItems.Length)];
+    }
 
-        int randomIndex = Random.Range(0, allItems.Length);
-        return allItems[randomIndex];
+    private GameObject textContainer; // Ссылка на объект с текстом
+
+    private void CreateFloatingText(string itemName)
+    {
+        // Создаем новый GameObject для фона
+        textContainer = GameObject.CreatePrimitive(PrimitiveType.Quad);
+
+        // Настраиваем материал для фона
+        MeshRenderer meshRenderer = textContainer.GetComponent<MeshRenderer>();
+        meshRenderer.material = new Material(Shader.Find("Unlit/Color"));
+        meshRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.3f);
+
+        // Задаем размер фона
+        textContainer.transform.localScale = new Vector3(2f, 1f, 1f);
+
+        // Создаем новый GameObject для текста
+        GameObject textObject = new GameObject("FloatingText");
+        textObject.transform.SetParent(textContainer.transform);
+        textObject.transform.localPosition = new Vector3(0, 0, -0.5f); // Немного впереди фона
+
+        // Добавляем компонент TextMeshPro
+        TextMeshPro textMesh = textObject.AddComponent<TextMeshPro>();
+
+        // Настраиваем параметры текста
+        textMesh.text = itemName;
+        textMesh.fontSize = 4;
+        textMesh.alignment = TextAlignmentOptions.Center;
+        textMesh.color = Color.white;
     }
 
     // Получить несколько случайных айтемов
