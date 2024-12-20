@@ -20,7 +20,7 @@ public class RequestedItemZone : MonoBehaviour
             if (checkableItem.CheckMatch())
             {
                 Debug.Log("Correct item placed!");
-                itemRequester.CreateFloatingText(checkableItem.item.itemName, checkableItem.item.icon);
+
                 itemRequester.CreateFloatingText("Правильный предмет!");
                 // Здесь можно добавить логику для правильного предмета
                 // Например, начислить очки или показать эффект
