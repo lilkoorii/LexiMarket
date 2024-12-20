@@ -370,6 +370,7 @@
 "Assets/Scripts/Item.cs"
 "Assets/Scripts/ItemRequester.cs"
 "Assets/Scripts/RequestedItemZone.cs"
+"Assets/Scripts/VRMovement.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01_UGUI.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark02.cs"
