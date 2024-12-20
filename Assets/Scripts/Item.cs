@@ -19,5 +19,9 @@ public class Item : ScriptableObject
     public string colorForeign;
     public ItemType type = ItemType.Фрукт;
     public string typeForeign;
-    public Sprite icon = null;
+    public Texture2D icon = null;
+
+    public void GetItemByName(string iTemName) {
+        return;
+    }
 }
