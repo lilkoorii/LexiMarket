@@ -22,6 +22,8 @@ public class RequestedItemZone : MonoBehaviour
                 Debug.Log("Correct item placed!");
 
                 itemRequester.CreateFloatingText("Правильный предмет!");
+                itemRequester.RequestedItem = itemRequester.GetRandomItem();
+                itemRequester.CreateFloatingText(itemRequester.RequestedItem.itemName);
                 // Здесь можно добавить логику для правильного предмета
                 // Например, начислить очки или показать эффект
             }
