@@ -28,7 +28,7 @@ public class ItemRequester : MonoBehaviour
             // Позиционируем контейнер над игроком
             Vector3 newPosition = new Vector3(
                 transform.position.x,
-                transform.position.y + 2f,
+                transform.position.y + 5f,
                 transform.position.z
             );
 
@@ -61,7 +61,7 @@ public void CreateFloatingText(string itemName)
         Destroy(textContainer);
     }
 
-    // Создаем новый GameObject для фона
+   //Создаем новый GameObject для фона
     textContainer = GameObject.CreatePrimitive(PrimitiveType.Quad);
     
     // Настраиваем материал для фона
@@ -75,7 +75,7 @@ public void CreateFloatingText(string itemName)
     // Создаем GameObject для иконки
     GameObject iconObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
     iconObject.transform.SetParent(textContainer.transform);
-    iconObject.transform.localPosition = new Vector3(-0.5f, 0, -0.01f); // Позиционируем слева
+    iconObject.transform.localPosition = new Vector3(-1f, 0, -0.01f); // Позиционируем слева
     iconObject.transform.localScale = new Vector3(0.5f, 0.5f, 1f); // Размер иконки
 
     // Настраиваем материал для иконки
@@ -112,7 +112,7 @@ public void CreateFloatingText(string itemName)
     textMesh.color = Color.white;
 
     // Настраиваем размер области текста
-    textMesh.rectTransform.sizeDelta = new Vector2(1.4f, 1f);
+    textMesh.rectTransform.sizeDelta = new Vector2(2f, 1.5f);
 }
 
     // Получить несколько случайных айтемов
