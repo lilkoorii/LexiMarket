@@ -20,4 +20,4 @@ MonoBehaviour:
   colorForeign: Red
   type: 0
   typeForeign: Fruit
-  icon: {fileID: 2800000, guid: b9a1dfa6737f7464cbcee8adc5ebadbf, type: 3}
+  icon: {fileID: 2800000, guid: 6084baffe92867c4e89fec9b131120e3, type: 3}

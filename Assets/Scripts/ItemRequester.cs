@@ -17,7 +17,7 @@ public class ItemRequester : MonoBehaviour
         RequestedItem = GetRandomItem();
         Debug.Log(RequestedItem.itemName);
 
-        // Создаем текст 
+        // Создаем всплывающий текст
         CreateFloatingText(RequestedItem.itemName);
     }
 
@@ -51,69 +51,84 @@ public class ItemRequester : MonoBehaviour
         return allItems[Random.Range(0, allItems.Length)];
     }
 
-    
-
-public void CreateFloatingText(string itemName)
-{
-    // Удаляем предыдущий текст, если он существует
-    if (textContainer != null)
+    public void CreateFloatingText(string itemName)
     {
-        Destroy(textContainer);
-    }
-
-   //Создаем новый GameObject для фона
-    textContainer = GameObject.CreatePrimitive(PrimitiveType.Quad);
-    
-    // Настраиваем материал для фона
-    MeshRenderer meshRenderer = textContainer.GetComponent<MeshRenderer>();
-    meshRenderer.material = new Material(Shader.Find("Unlit/Color"));
-    meshRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.3f);
-
-    // Задаем размер фона
-    textContainer.transform.localScale = new Vector3(2f, 1f, 1f);
-
-    // Создаем GameObject для иконки
-    GameObject iconObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
-    iconObject.transform.SetParent(textContainer.transform);
-    iconObject.transform.localPosition = new Vector3(-1f, 0, -0.01f); // Позиционируем слева
-    iconObject.transform.localScale = new Vector3(0.5f, 0.5f, 1f); // Размер иконки
-
-    // Настраиваем материал для иконки
-    MeshRenderer iconRenderer = iconObject.GetComponent<MeshRenderer>();
-    iconRenderer.material = new Material(Shader.Find("Unlit/Transparent"));
-
-    // Если это запрошенный предмет, получаем его иконку
-    if (RequestedItem != null && RequestedItem.itemName == itemName)
-    {
-        iconRenderer.material.mainTexture = RequestedItem.icon;
-    }
-    else
-    {
-        // Ищем предмет по имени для получения иконки
-        Item item = GetItemByName(itemName);
-        if (item != null)
+        // Удаляем предыдущий текст, если он существует
+        if (textContainer != null)
         {
-            iconRenderer.material.mainTexture = item.icon;
+            Destroy(textContainer);
         }
+
+        // Создаем новый GameObject для общего контейнера (фон + иконка + текст)
+        textContainer = new GameObject("FloatingBackground");
+        
+        // Добавляем Quad в качестве «фона»
+        GameObject backgroundQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        backgroundQuad.name = "BackgroundQuad";
+        backgroundQuad.transform.SetParent(textContainer.transform, false);
+
+        // Настраиваем материал для фона (слегка затемнённый)
+        MeshRenderer backgroundRenderer = backgroundQuad.GetComponent<MeshRenderer>();
+        backgroundRenderer.material = new Material(Shader.Find("Unlit/Color"));
+        backgroundRenderer.material.color = new Color(0.45f, 0.55f, 0.0f, 0.5f); // полупрозрачный чёрный
+
+        // Задаём размер фона
+        backgroundQuad.transform.localScale = new Vector3(3f, 2f, 1f);
+
+        // Создаем контейнер для «иконка + текст», чтобы их можно было красиво разместить по центру
+        GameObject contentContainer = new GameObject("ContentContainer");
+        contentContainer.transform.SetParent(textContainer.transform, false);
+        // Ставим в (0,0) относительно фона
+        contentContainer.transform.localPosition = Vector3.zero;
+
+        // Создаем GameObject для иконки
+        GameObject iconObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        iconObject.transform.SetParent(contentContainer.transform, false);
+        iconObject.transform.localScale = new Vector3(0.5f, 0.5f, 1f); 
+        // Поднимем иконку немного вверх
+        iconObject.transform.localPosition = new Vector3(0f, 0.3f, -0.01f);
+
+        // Настраиваем материал для иконки
+        MeshRenderer iconRenderer = iconObject.GetComponent<MeshRenderer>();
+        iconRenderer.material = new Material(Shader.Find("Unlit/Transparent"));
+
+        // Если это запрошенный предмет, получаем его иконку
+        if (RequestedItem != null && RequestedItem.itemName == itemName)
+        {
+            iconRenderer.material.mainTexture = RequestedItem.icon;
+        }
+        else
+        {
+            // Ищем предмет по имени для получения иконки
+            Item item = GetItemByName(itemName);
+            if (item != null)
+            {
+                iconRenderer.material.mainTexture = item.icon;
+            }
+        }
+
+        // Создаем новый GameObject для текста
+        GameObject textObject = new GameObject("FloatingText");
+        textObject.transform.SetParent(contentContainer.transform, false);
+        // Опускаем текст чуть ниже иконки
+        textObject.transform.localPosition = new Vector3(0f, -0.2f, -0.01f);
+
+        // Добавляем компонент TextMeshPro
+        TextMeshPro textMesh = textObject.AddComponent<TextMeshPro>();
+
+        // Настраиваем параметры текста
+        textMesh.text = itemName;
+        textMesh.fontSize = 4;
+        textMesh.alignment = TextAlignmentOptions.Center; 
+        textMesh.color = Color.white;
+
+        // Делаем небольшую обводку для более симпатичного вида
+        textMesh.outlineWidth = 0.2f;            // толщина обводки
+        textMesh.outlineColor = Color.black;     // цвет обводки
+
+        // Настраиваем размер области текста (чтобы текст точно влез)
+        textMesh.rectTransform.sizeDelta = new Vector2(2f, 1f);
     }
-
-    // Создаем новый GameObject для текста
-    GameObject textObject = new GameObject("FloatingText");
-    textObject.transform.SetParent(textContainer.transform);
-    textObject.transform.localPosition = new Vector3(0.3f, 0, -0.01f); // Позиционируем справа от иконки
-
-    // Добавляем компонент TextMeshPro
-    TextMeshPro textMesh = textObject.AddComponent<TextMeshPro>();
-
-    // Настраиваем параметры текста
-    textMesh.text = itemName;
-    textMesh.fontSize = 4;
-    textMesh.alignment = TextAlignmentOptions.Left; // Выравнивание по левому краю
-    textMesh.color = Color.white;
-
-    // Настраиваем размер области текста
-    textMesh.rectTransform.sizeDelta = new Vector2(2f, 1.5f);
-}
 
     // Получить несколько случайных айтемов
     public Item[] GetRandomItems(int count)
@@ -124,7 +139,7 @@ public void CreateFloatingText(string itemName)
             return null;
         }
 
-        // Ограничиваем количество запрашиваемых айтем��в доступным количеством
+        // Ограничиваем количество запрашиваемых айтемов доступным количеством
         count = Mathf.Min(count, allItems.Length);
         
         // Создаем копию массива, чтобы не изменять оригинальный
