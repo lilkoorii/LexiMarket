@@ -20,6 +20,8 @@ public class CheckableItem : MonoBehaviour
     {
         if (itemRequester == null || item == null)
             return false;
+        Debug.Log(itemRequester.RequestedItem);
+        Debug.Log(item);
             
         return item == itemRequester.RequestedItem;
     }

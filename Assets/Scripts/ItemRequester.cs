@@ -105,6 +105,10 @@ public class ItemRequester : MonoBehaviour
             {
                 iconRenderer.material.mainTexture = item.icon;
             }
+            else {
+                  iconObject.SetActive(false);
+            }
+            
         }
 
         // Создаем новый GameObject для текста
