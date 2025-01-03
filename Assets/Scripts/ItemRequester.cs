@@ -15,10 +15,10 @@ public class ItemRequester : MonoBehaviour
         // Загружаем все Item ScriptableObjects из папки Resources
         allItems = Resources.LoadAll<Item>("Items");
         RequestedItem = GetRandomItem();
-        Debug.Log(RequestedItem.itemName);
+        Debug.Log(RequestedItem.itemNameForeign);
 
         // Создаем всплывающий текст
-        CreateFloatingText(RequestedItem.itemName);
+        CreateFloatingText(RequestedItem.itemNameForeign);
     }
 
     private void Update()
@@ -164,24 +164,24 @@ public class ItemRequester : MonoBehaviour
         return result;
     }
 
-    // Получить конкретный айтем по имени
-    public Item GetItemByName(string itemName)
+public Item GetItemByName(string itemName)
+{
+    if (allItems == null || allItems.Length == 0)
     {
-        if (allItems == null || allItems.Length == 0)
-        {
-            Debug.LogWarning("No items found!");
-            return null;
-        }
-
-        foreach (Item item in allItems)
-        {
-            if (item.itemName.ToLower() == itemName.ToLower())
-            {
-                return item;
-            }
-        }
-
-        Debug.LogWarning($"Item with name '{itemName}' not found!");
+        Debug.LogWarning("No items found!");
         return null;
     }
+
+    foreach (Item item in allItems)
+    {
+        if (item.itemName.ToLower() == itemName.ToLower() || 
+            item.itemNameForeign.ToLower() == itemName.ToLower())
+        {
+            return item;
+        }
+    }
+
+    Debug.LogWarning($"Item with name '{itemName}' not found!");
+    return null;
+}
 }

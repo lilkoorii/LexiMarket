@@ -28,7 +28,7 @@ public class RequestedItemZone : MonoBehaviour
             else
             {
                 Debug.Log("Wrong item placed!");
-                itemRequester.CreateFloatingText(checkableItem.item.itemName);
+                itemRequester.CreateFloatingText(checkableItem.item.itemNameForeign);
                 itemRequester.CreateFloatingText("Неправильный предмет!");
             }
         }
@@ -38,7 +38,7 @@ public class RequestedItemZone : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         itemRequester.RequestedItem = itemRequester.GetRandomItem();
-        itemRequester.CreateFloatingText(itemRequester.RequestedItem.itemName);
+        itemRequester.CreateFloatingText(itemRequester.RequestedItem.itemNameForeign);
     }
 
     private void OnTriggerExit(Collider other)
